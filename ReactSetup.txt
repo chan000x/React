@@ -1,0 +1,231 @@
+To create react app : npm create vite@latest
+
+Go to created project directry : cd ProjectName
+
+Install packages needed to created project : npm install
+(it will read the package.json and install neccessary packages into our machine)
+
+Then run the react app : npm run dev
+
+A component is always is a jsx file and it is any function in JavaScript that returns some kind of JSX code.
+A component is always start with capital letter.
+A return of component must in one root element.
+if no tag used to retrun like div then use this tag(Fragment) : <> all the elements goes here .</>
+Frament is a placeholder for parent element.
+
+if we use same element more than one time we can create a saparate component and reuse it :
+            function App() {
+            return (
+                <>
+                <Text message1='Hello' message2="World"/>
+                <Text message1='Chandana' message2="Sapumal"></Text> // Text is component name.
+                </>
+            )
+            }
+
+            function Text({message1,message2}) {
+            return (
+                <div>
+                <h1>{message2}</h1>
+                <p>{message1}</p>
+            </div>
+            )
+            }
+
+
+in jsx className is used instead of class used in javascript.
+
+
+
+conditional rendering component :
+
+            function App() {
+                const movieNumber = 1;
+                return (
+                    <>
+                        {
+                            movieNumber ===1 ?   <MovieCard movie = {
+                            {
+                                title: "Titanic",
+                                name : "Titanic",
+                                url: "titanic.com",
+                                release_date: "2024"
+
+                            }
+                            }/> : 
+                            <MovieCard movie = {
+                            {
+                                title: "Harry Poter",
+                                name : "Harry Poter",
+                                url: "harry.com",
+                                release_date: "2021"
+
+                            }
+                        }/>
+                      }
+                    </>
+                )
+            }
+
+other way of conditional rendering (short circuiting):
+
+function App() {
+        const movieNumber = 2;
+        return (
+            <>
+                {
+                    movieNumber ===1  &&  <MovieCard movie = {
+                        {
+                            title: "Titanic",
+                            name : "Titanic",
+                            url: "titanic.com",
+                            release_date: "2024"
+
+                        }
+                        }/> 
+                }
+        
+            </>
+        )
+}
+
+
+
+React State Hook :
+    State is something where once it's updated, the component will change and re-render itself to show the new State.
+        const [searchQuery, setSearchQuery ] = useState("");
+          - name of the State to be = searchQuery
+          - the function which will allow to update the state : setSearchQuery
+          - inside of the brackets you writes the defaults values of the state.
+
+                <input 
+                    type='text' 
+                    placeholder='Sarch for movies...' 
+                    className='search-input'
+                    value={searchQuery} // this locks on a state.
+                    onChange={(e) => setSearchQuery(e.target.value)} // to get the new changes add update the state passing e.
+                     />
+
+
+
+        to search result filter : 
+            <div className='movies-grid'>
+                {movies.map(movie => (
+                    movie.title.toLowerCase().startsWith(searchQuery) && <MovieCard movie={movie} key={movie.id} />
+                ))}
+            </div>
+
+React Routers:
+    to access different location like localhost/home_page, localhost/favorites we need to use react routers.    
+    for that we need to install another package : npm install react-router-dom
+
+
+    main.jsx 
+            import { StrictMode } from 'react'
+            import { createRoot } from 'react-dom/client'
+            import './index.css'
+            import App from './App.jsx'
+            import {BrowserRouter} from "react-router-dom"
+
+            createRoot(document.getElementById('root')).render(
+            <StrictMode>
+                <BrowserRouter>
+                     <App />
+                </BrowserRouter>
+            </StrictMode>,
+            )
+
+    App.jsx 
+            import { useState } from 'react'
+            import './App.css'
+            import MovieCard from './components/MovieCard';
+            import Home from './pages/Home';
+            import { Router } from 'react-router-dom';
+            import {Routes, Route} from "react-router-dom"
+            import Favorite from './pages/Favorites';
+
+
+            function App() {
+
+            return (
+                <main className='main-content'>
+                <Routes>
+                    <Route path='/' element={<Home />} />
+                    <Route path='/favorites' element={<Favorite />} />
+
+                </Routes>
+                </main>
+            );
+            }
+            export default App
+    this will create two main routers in the webbrowser.
+    http://localhost:5173/
+    http://localhost:5173/favorites
+
+
+to add a NavBar :
+    NavBar.jsx
+        import { Link } from "react-router-dom";
+        function NavBar() {
+            return <nav className="navbar">
+                <div className="navbar-brand">
+                    <Link to= "/">Movie App</Link>
+                </div>
+                <div className="navbar-links">
+                    <Link to= "/" className="nav-link">Home</Link>
+                    <Link to= "/favorites" className="nav-link">Favorites</Link>
+                </div>
+            </nav>
+        }
+
+        export default NavBar;
+
+    App.jsx :
+        import MovieCard from './components/MovieCard';
+        import Home from './pages/Home';
+        import { Router } from 'react-router-dom';
+        import {Routes, Route} from "react-router-dom"
+        import Favorite from './pages/Favorites';
+        import NavBar from './components/NavBar';
+
+        function App() {
+
+        return (
+            <div>
+                <NavBar />
+                
+            <main className='main-content'>
+            <Routes>
+                <Route path='/' element={<Home />} />
+                <Route path='/favorites' element={<Favorite />} />
+            </Routes>
+            </main>
+
+            </div>
+        );
+        }
+
+to use api handling we create a folder called services:
+   file inside create normal javascript file (.js) 
+
+
+useEffect is used to render a componet if only a change is occured only. for example in a api call if we directly called the exported function then it will call it again and again. to avoid it only change is occured then useEffect is fetch the data from api.
+    useEffect(() => {
+
+    },[]); it required a function and a array to call if a data change in array then function is called.
+   if we do not write in array it will only render one time and do nothing again.
+
+
+React Context :
+    when we add a item to favorites then it only contains in until browser refresh done. otherwise it get into default state.
+    to store those thing perment we can use local storage. it comes up with browser.
+    context that will allows state to be globallay available to anything that is withing the provided context.
+
+
+
+
+
+
+
+
+
